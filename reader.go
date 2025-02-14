@@ -216,12 +216,9 @@ func (r *binaryReader) readString(max int) (string, error) {
 		return "", fmt.Errorf("string length prefix exceeds max allocation limit of %d: %d", max, l)
 	}
 	b := make([]byte, l)
-	n, err := r.Read(b)
+	_, err = io.ReadFull(r, b)
 	if err != nil {
 		return "", fmt.Errorf("failed to read string bytes: %w", err)
-	}
-	if n != l {
-		return "", fmt.Errorf("failed to read full string length (%d), instead got: %s", l, string(b[:n]))
 	}
 	return string(b), nil
 }
