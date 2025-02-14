@@ -152,12 +152,9 @@ func (r *binaryReader) readInt8() (int8, error) {
 // The readBuf method reads len bytes into r.buf. len must not exceed 8.
 func (r *binaryReader) readBuf(len int) ([]byte, error) {
 	b := r.buf[:len]
-	n, err := r.Read(b)
+	_, err := io.ReadFull(r, b)
 	if err != nil {
 		return nil, err
-	}
-	if n != len {
-		return nil, errors.New("TODO failed to read enough bytes")
 	}
 	return b, nil
 }
